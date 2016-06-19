@@ -1,4 +1,3 @@
-
 package com.nxy.spider.except;
 
 public class AppRuntimeException extends RuntimeException {
