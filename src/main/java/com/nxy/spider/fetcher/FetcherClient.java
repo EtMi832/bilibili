@@ -1,8 +1,12 @@
 package com.nxy.spider.fetcher;
 
+import com.google.common.base.Strings;
+import com.nxy.spider.except.NoSupportRequestException;
 import com.nxy.spider.util.ParamsUtil;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -17,7 +21,6 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -47,31 +50,49 @@ public class FetcherClient {
         defaultheaders.add(new BasicHeader("Accept-Encoding","gzip, deflate, sdch"));
         defaultheaders.add(new BasicHeader("Accept-Language","zh-CN,zh;q=0.8,en;q=0.6"));
         httpClientBuilder.setDefaultHeaders(defaultheaders);
+        HttpHost proxy = new HttpHost("127.0.0.1",8888);
+        httpClientBuilder.setProxy(proxy);
     }
 
-    public void execute(Request request) {
+    public static HttpResponse execute(final Request request) throws IOException, NoSupportRequestException {
 
         CloseableHttpClient closeableHttpClient = httpClientBuilder.build();
+        String url = request.getUrl();
+        if (!Strings.isNullOrEmpty(url)){
+            String type = request.getType();
+            HttpUriRequest urlrequest = null;
+            if (type.equals("get")){
+                urlrequest = createHttpGet(request);
+            }else if(type.equals("post")){
+                urlrequest = createHttpPost(request);
+            }
 
-        HttpUriRequest urlrequest = new HttpGet("");
-        try {
-            closeableHttpClient.execute(urlrequest);
-        } catch (IOException e) {
-            e.printStackTrace();
+            return closeableHttpClient.execute(urlrequest);
+
+        }else{
+            throw new NoSupportRequestException("请求地址为空");
         }
+
     }
-    private HttpGet createHttpGet(Request request){
+    private static HttpGet createHttpGet(Request request){
 
         String params = ParamsUtil.toUrl(request.getParams());
         HttpGet httpGet = new HttpGet(request.getUrl()+params);
-        httpGet.setHeaders((Header[]) request.getHeaders().toArray());
+        List<Header> headers = request.getHeaders();
+        Header[] headerArr = new Header[headers.size()];
+        headers.toArray(headerArr);
+        httpGet.setHeaders(headerArr);
         return httpGet;
     }
 
-    private HttpPost createHttpPost(Request request){
+    private static HttpPost createHttpPost(Request request){
 
         HttpPost httpPost = new HttpPost(request.getUrl());
-        HashMap<String,String> params =request.getParams();
+        //设置head
+        List<Header> headers = request.getHeaders();
+        Header[] headerArr = new Header[headers.size()];
+        headers.toArray(headerArr);
+        httpPost.setHeaders(headerArr);
 
         List<BasicNameValuePair> parameters =
                 ParamsUtil.toNameValuePair(request.getParams());
