@@ -28,14 +28,6 @@ public class DefaultRequestConfig {
         return defaultConnectionTimeout;
     }
 
-    /**
-     * Setter for property 'defaultConnectionTimeout'.
-     *
-     * @param defaultConnectionTimeout Value to set for property 'defaultConnectionTimeout'.
-     */
-    public void setDefaultConnectionTimeout(int defaultConnectionTimeout) {
-        this.defaultConnectionTimeout = defaultConnectionTimeout;
-    }
 
     /**
      * Getter for property 'defaultConnectionRequestTimeout'.
@@ -46,14 +38,6 @@ public class DefaultRequestConfig {
         return defaultConnectionRequestTimeout;
     }
 
-    /**
-     * Setter for property 'defaultConnectionRequestTimeout'.
-     *
-     * @param defaultConnectionRequestTimeout Value to set for property 'defaultConnectionRequestTimeout'.
-     */
-    public void setDefaultConnectionRequestTimeout(int defaultConnectionRequestTimeout) {
-        this.defaultConnectionRequestTimeout = defaultConnectionRequestTimeout;
-    }
 
     /**
      * Getter for property 'defaultSoTimeout'.
@@ -64,12 +48,4 @@ public class DefaultRequestConfig {
         return defaultSoTimeout;
     }
 
-    /**
-     * Setter for property 'defaultSoTimeout'.
-     *
-     * @param defaultSoTimeout Value to set for property 'defaultSoTimeout'.
-     */
-    public void setDefaultSoTimeout(int defaultSoTimeout) {
-        this.defaultSoTimeout = defaultSoTimeout;
-    }
 }

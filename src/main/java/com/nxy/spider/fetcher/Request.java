@@ -1,5 +1,6 @@
 package com.nxy.spider.fetcher;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -10,11 +11,10 @@ import org.apache.http.message.BasicHeader;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * 请求类
@@ -30,27 +30,53 @@ public class Request implements Serializable {
 
     private HashMap<String, String[]> params = Maps.newHashMap();
 
+    private final static String URLPATTER = "[a-zA-z]+://[^\\s]*";
+
     /**
      * 创建一个request
      *
      * @return
      */
-    private  static Request build(String url) {
+    private static Request build(String url) throws NoSupportRequestException {
         Request req = new Request();
-        try {
-            url = URLDecoder.decode(url,"utf-8");
-        } catch (UnsupportedEncodingException e) {
-            new NoSupportRequestException();
-        }
-        return new Request();
+        req.setUrl(url);
+        req.parseUrl();
+        return req;
+    }
+
+    /**
+     * 格式化URL
+     */
+    private void parseUrl() throws NoSupportRequestException {
+        if (Pattern.matches(URLPATTER, url)) {
+            String pairs[] = url.split("\\?");
+            String oUrl = pairs[0];
+            if (pairs.length > 1) { //有参数 只取第一个?号后的 其他抛弃
+                String paramStr = pairs[1];
+                String paramPairs[] = paramStr.split("&");
+                int pos;
+                String paramPair;
+                for (int i = 0, length = paramPairs.length; i < length; i++) {
+                    paramPair = paramPairs[i];
+                    pos = paramPair.lastIndexOf("=");
+                    if (pos > -1) {
+                        //添加到参数列表
+                        query(paramPair.substring(0, pos)
+                                , paramPair.substring(pos + 1));
+                    }
+                }
+            }
+            this.url = oUrl;
+        } else throw new NoSupportRequestException("url错误:" + this.url);
     }
 
     /**
      * get 请求
+     *
      * @param url
      * @return
      */
-    public static Request get(String url){
+    public static Request get(String url) throws NoSupportRequestException {
         Request req = build(url);
         req.type = "get";
         return req;
@@ -58,16 +84,19 @@ public class Request implements Serializable {
 
     /**
      * post 请求
+     *
      * @param url
      * @return
      */
-    public static Request post(String url){
+    public static Request post(String url) throws NoSupportRequestException {
         Request req = build(url);
         req.type = "post";
         return req;
     }
+
     /**
      * 体检head头
+     *
      * @param name
      * @param value
      * @return
@@ -81,25 +110,27 @@ public class Request implements Serializable {
 
     /**
      * 添加查询参数
+     *
      * @param key
      * @param value
      * @return
      */
-    public Request query(String key ,String value){
-        if(params.containsKey(key)){
+    public Request query(String key, String value) {
+        if (params.containsKey(key)) {
             String[] values = params.get(key);
             int length = values.length;
-            String []newValues = new String[length+1];
-            for (int i = 0; i <length ; i++) {
+            String[] newValues = new String[length + 1];
+            for (int i = 0; i < length; i++) {
                 newValues[i] = values[i];
             }
             newValues[length] = value;
-            params.put(key,newValues);
-        }else{
-            params.put(key,new String[]{value});
+            params.put(key, newValues);
+        } else {
+            params.put(key, new String[]{value});
         }
         return this;
     }
+
     public HttpResponse end() throws NoSupportRequestException {
         HttpResponse rep = null;
         try {
@@ -109,6 +140,7 @@ public class Request implements Serializable {
         }
         return rep;
     }
+
     /**
      * Getter for property 'type'.
      *
@@ -153,10 +185,10 @@ public class Request implements Serializable {
     public ArrayList<Header> getHeaders() {
         ArrayList<Header> headerList = Lists.newArrayList();
         for (Map.Entry<String, String> entry : headers.entrySet()) {
-            BasicHeader header = new BasicHeader(entry.getKey(),entry.getValue());
+            BasicHeader header = new BasicHeader(entry.getKey(), entry.getValue());
             headerList.add(header);
         }
-        return  headerList;
+        return headerList;
     }
 
 
@@ -169,4 +201,8 @@ public class Request implements Serializable {
         return params;
     }
 
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
+    }
 }

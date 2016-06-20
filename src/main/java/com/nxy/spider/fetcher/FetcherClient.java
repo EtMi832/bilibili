@@ -74,10 +74,17 @@ public class FetcherClient {
         }
 
     }
+
+    /**
+     * 创建get请求
+     *
+     * @param request
+     * @return
+     */
     private static HttpGet createHttpGet(Request request){
 
         String params = ParamsUtil.toUrl(request.getParams());
-        HttpGet httpGet = new HttpGet(request.getUrl()+params);
+        HttpGet httpGet = new HttpGet(request.getUrl() + "?" + params);
         List<Header> headers = request.getHeaders();
         Header[] headerArr = new Header[headers.size()];
         headers.toArray(headerArr);
@@ -85,7 +92,13 @@ public class FetcherClient {
         return httpGet;
     }
 
-    private static HttpPost createHttpPost(Request request){
+    /**
+     * 创建post请求
+     *
+     * @param request
+     * @return
+     */
+    private static HttpPost createHttpPost(Request request) throws NoSupportRequestException {
 
         HttpPost httpPost = new HttpPost(request.getUrl());
         //设置head
@@ -93,14 +106,14 @@ public class FetcherClient {
         Header[] headerArr = new Header[headers.size()];
         headers.toArray(headerArr);
         httpPost.setHeaders(headerArr);
-
+        //设置params
         List<BasicNameValuePair> parameters =
                 ParamsUtil.toNameValuePair(request.getParams());
         HttpEntity entiy = null;
         try {
             entiy = new UrlEncodedFormEntity(parameters,"UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            throw new NoSupportRequestException("编码出错",e);
         }
         httpPost.setEntity(entiy);
         return httpPost;
