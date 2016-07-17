@@ -51,7 +51,7 @@ public class FetcherClient {
         defaultheaders.add(new BasicHeader("Accept-Language","zh-CN,zh;q=0.8,en;q=0.6"));
         httpClientBuilder.setDefaultHeaders(defaultheaders);
         HttpHost proxy = new HttpHost("127.0.0.1",8888);
-        httpClientBuilder.setProxy(proxy);
+		// httpClientBuilder.setProxy(proxy);
     }
 
     public static HttpResponse execute(final Request request) throws IOException, NoSupportRequestException {
