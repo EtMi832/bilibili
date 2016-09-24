@@ -16,7 +16,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -29,7 +28,6 @@ import java.util.List;
  */
 public class FetcherClient {
 
-    private final static Logger log = Logger.getLogger(FetcherClient.class);
 
     private final static HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
 
