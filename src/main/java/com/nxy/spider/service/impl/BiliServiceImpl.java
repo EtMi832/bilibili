@@ -1,5 +1,6 @@
 package com.nxy.spider.service.impl;
 
+import com.alibaba.fastjson.TypeReference;
 import com.nxy.spider.entiy.AvPlayInfo;
 import com.nxy.spider.except.NoSupportRequestException;
 import com.nxy.spider.fetcher.Request;
@@ -20,11 +21,11 @@ import java.io.StringWriter;
 /**
  * Created by snailnan on 2016/9/27.
  */
-//@Service
+@Service
 public class BiliServiceImpl implements BiliService{
     public static final Logger logger = LoggerFactory.getLogger(BiliServiceImpl.class);
 
-//    @Value("${app.bili.api.avinfo-url}")
+    @Value("${app.bili.api.avinfo-url}")
     private String AV_INFO_API;
 
     @Override
@@ -41,7 +42,9 @@ public class BiliServiceImpl implements BiliService{
                 c= b.read();
             }
             w.flush();
-            return (AvPlayInfo) JsonUtil.getBean(w.toString(),Bresult.class).getData();
+            Bresult<AvPlayInfo> bresult = JsonUtil.getBean(w.toString(),
+                    new TypeReference<Bresult<AvPlayInfo>>(){});
+            return bresult.getData();
 
         } catch (NoSupportRequestException e) {
            logger.error("request url is noSupport {}:{}",AV_INFO_API,avId);

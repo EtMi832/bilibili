@@ -9,12 +9,10 @@ import org.springframework.context.ApplicationContext;
  */
 @SpringBootApplication
 public class Application {
-
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(Application.class);
         app.setWebEnvironment(false);
         ApplicationContext context = app.run(args);
-        context.getEnvironment().getProperty("app.bili.api.avinfo-url");
+        System.out.println(context.getEnvironment().getProperty("app.bili.api.avinfo-url"));
     }
-
 }
