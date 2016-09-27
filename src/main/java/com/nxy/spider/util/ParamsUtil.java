@@ -20,7 +20,7 @@ public class ParamsUtil {
     public static String toUrl(Map<String,String[]> params){
         if (params == null || params.isEmpty()){
             return "";
-        };
+        }
         StringBuilder urlSb = new StringBuilder();
         for (Map.Entry<String,String[]> entry : params.entrySet()){
             String key = entry.getKey();
