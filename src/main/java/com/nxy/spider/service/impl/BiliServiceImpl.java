@@ -32,20 +32,19 @@ public class BiliServiceImpl implements BiliService{
     public AvPlayInfo  getAvPlayInfo(Integer avId){
         try {
             HttpResponse response = Request.get(AV_INFO_API).query("aid",avId.toString()).end();
-
-            InputStream in = response.getEntity().getContent();
-            BufferedInputStream b = new BufferedInputStream(in);
-            StringWriter w = new StringWriter();
-            int c = b.read();
-            while (c > -1){
-                w.write(c);
-                c= b.read();
+            try (InputStream in = response.getEntity().getContent();
+                 BufferedInputStream b = new BufferedInputStream(in);){
+                StringWriter w = new StringWriter();
+                int c = b.read();
+                while (c > -1){
+                    w.write(c);
+                    c= b.read();
+                }
+                w.flush();
+                Bresult<AvPlayInfo> bresult = JsonUtil.getBean(w.toString(),
+                        new TypeReference<Bresult<AvPlayInfo>>(){});
+                return bresult.getData();
             }
-            w.flush();
-            Bresult<AvPlayInfo> bresult = JsonUtil.getBean(w.toString(),
-                    new TypeReference<Bresult<AvPlayInfo>>(){});
-            return bresult.getData();
-
         } catch (NoSupportRequestException e) {
            logger.error("request url is noSupport {}:{}",AV_INFO_API,avId);
         } catch (IOException e) {
