@@ -21,7 +21,7 @@ public class BiliServiceTest {
     
     @Test
     public void getAvPlayInfo(){
-        int avid = 6365559;
+        long avid = 6365559;
         AvPlayInfo av = biliService.getAvPlayInfo(avid);
         System.out.println(av.toString());
     }

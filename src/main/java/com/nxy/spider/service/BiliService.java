@@ -11,5 +11,12 @@ public interface BiliService {
      * @param avId
      * @return
      */
-    AvPlayInfo getAvPlayInfo(Integer avId);
+    AvPlayInfo getAvPlayInfo(Long avId);
+
+    /**
+     * 保存av播放信息
+     * @param bean
+     * @return
+     */
+    boolean saveAvinfo(AvPlayInfo bean);
 }

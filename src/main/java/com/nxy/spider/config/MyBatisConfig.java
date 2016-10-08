@@ -34,14 +34,14 @@
 ////        characterEncodingFilter.setForceEncoding(true);
 ////        return characterEncodingFilter;
 ////    }
-////    @Bean
-////    public DataSource customDataSource(Environment env){
-////        HikariConfig hikariConfig = new HikariConfig();
-////        hikariConfig.setJdbcUrl(env.getProperty("spring.datasource.url"));
-////        hikariConfig.setUsername(env.getProperty("spring.datasource.username"));
-////        hikariConfig.setPassword(env.getProperty("spring.datasource.password"));
-////        return new HikariDataSource(hikariConfig);
-////    }
+//    @Bean
+//    public DataSource customDataSource(Environment env){
+//        HikariConfig hikariConfig = new HikariConfig();
+//        hikariConfig.setJdbcUrl(env.getProperty("spring.datasource.url"));
+//        hikariConfig.setUsername(env.getProperty("spring.datasource.username"));
+//        hikariConfig.setPassword(env.getProperty("spring.datasource.password"));
+//        return new HikariDataSource(hikariConfig);
+//    }
 //    @Bean(name = "sqlSessionFactory")
 //    public SqlSessionFactory sqlSessionFactoryBean() {
 //        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();

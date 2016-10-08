@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,5 +29,12 @@ public class SampleTest {
     public void testLong() {
     	Integer i= 100;
         Long l= i.longValue();
+
     }
+    @Test
+	public void test3(){
+		AtomicInteger ai = new AtomicInteger(10);
+		System.out.println(ai.getAndIncrement());
+		System.out.println(ai.get());
+	}
 }
