@@ -1,12 +1,3 @@
-logging:
-  file: F:\logs\bsearch\app.log
-  level: debug
-app:
-  version: 1.0
-  bili:
-    api:
-      avinfo-url: http://api.bilibili.com/archive_stat/stat
-      avinfo-start: 100
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
@@ -15,3 +6,13 @@ spring:
     username: root
     password: nxy
     driver-class-name: com.mysql.jdbc.Driver
+logging:
+  file: F:\logs\bsearch\app.log
+  level: debug
+app:
+  version: 1.0
+  bili:
+    api:
+      avinfo-url: http://api.bilibili.com/archive_stat/stat
+      avinfo-start: 163
+

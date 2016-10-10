@@ -36,15 +36,18 @@ public class AvPlayInfoTask implements InitializingBean {
     /**
      * 每秒执行一次
      */
-    @Scheduled(fixedRate = 1000L)
+    @Scheduled(fixedRate = 2000L)
     public void avPlayinfo(){
-        BiliExecutorService.getRequest().submit(()->{
-            Long avid = curId.getAndIncrement();
-            AvPlayInfo info = biliService.getAvPlayInfo(avid);
-            info.setAvid(avid);
-            info.setUpdatetime(System.currentTimeMillis());
-            log.info("get avinfo avid;{}",avid);
-        });
+//        BiliExecutorService.getRequest().submit(()->{
+//
+//        });
+        Long avid = curId.getAndIncrement();
+        AvPlayInfo info = biliService.getAvPlayInfo(avid);
+        info.setAvid(avid);
+        info.setUpdatetime(System.currentTimeMillis());
+        log.info("get avinfo avid;{}",avid);
+        biliService.saveAvinfo(info);
+        log.info("save avinfo avid;{}",avid);
     }
 
 }

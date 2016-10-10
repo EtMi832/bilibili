@@ -9,7 +9,6 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
  * Created by snailnan on 2016/9/1.
  */
 @Configuration
-//@ImportResource(locations = "classpath:spring-mvc.xml")
 public class SpringConfig {
     @Bean
     public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
